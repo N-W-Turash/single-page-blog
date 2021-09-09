@@ -32,3 +32,6 @@ export const updatePost = async (data) => {
 export const deletePost = async (postId) => {
   await delt(`/posts/${postId}`);
 }
+
+
+

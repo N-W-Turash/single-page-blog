@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { useParams, useHistory } from "react-router-dom";
+import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import withLayout from "../../components/layout/";
 import Loader from "../../components/loader";
 import Comment from "./components/comment";
@@ -9,20 +9,44 @@ import * as postsApi from "../../apis/posts-api";
 const SinglePost = () => {
 
     let { id } = useParams();
+    const history = useHistory();
 
     const [postLoading, setPostLoading] = useState(false);
     const [commentsLoading, setCommentsLoading] = useState(false);
     const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
+    const [show, setShow] = useState(false);
+    // const [loading, setLoading] = useState(false);
 
     /**
     * Has effect on init
     */
-    useEffect(() => {
+     useEffect(() => {
         getSinglePost(id);
         getSinglePostComments(id);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+
+    const handleDeleteConfirm = () => {
+        setPostLoading(true);
+        postsApi.deletePost(id).then(
+            (res) => {
+                getSinglePost(id);
+                getSinglePostComments(id);
+                setShow(false);
+                setPostLoading(false);
+                history.push("/");
+            },
+            (err) => {
+                setPostLoading(true);
+                setShow(false);
+            }
+        );
+    };
 
     const getSinglePost = async (id) => {
 
@@ -41,7 +65,6 @@ const SinglePost = () => {
         setCommentsLoading(true);
         try {
             const response = await postsApi.getPostComments(id);
-            console.log("comments", response);
             setComments([...response.data]);
             setCommentsLoading(false);
         } catch (error) {
@@ -64,10 +87,13 @@ const SinglePost = () => {
                         {post.body && (
                             <p className="my-4">{post.body}</p>
                         )}
-                        {/* Will be used later */}
-                        {/* <Link ></Link> */}
-                        {/* <Button variant="link">Link</Button>
-                        <Button variant="link">Link</Button> */}
+                        <Button
+                            variant="link"
+                            className="text-error"
+                            onClick={handleShow}
+                        >
+                            <small>Delete This Post</small>
+                        </Button>
                         <hr className="mb-4 border-light" />
                     </Col>)
                 }
@@ -79,12 +105,12 @@ const SinglePost = () => {
                         comments.length ?
                             comments.map((comment) => {
                                 return (
-                                    <Comment 
+                                    <Comment
                                         key={comment.id}
                                         comment={comment}
-                                        postId={comment.postId} 
-                                        name={comment.name} 
-                                        title={comment.title} 
+                                        postId={comment.postId}
+                                        name={comment.name}
+                                        title={comment.title}
                                         body={comment.body}
                                     />
                                 )
@@ -93,6 +119,19 @@ const SinglePost = () => {
                     }
                 </Col>
             </Row>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header>
+                    <Modal.Title>Are you sure to delete this post?</Modal.Title>
+                </Modal.Header>
+                <Modal.Footer>
+                    <Button variant="secondary-outline" size="sm" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="danger" size="sm" onClick={handleDeleteConfirm}>
+                        Yes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
     );
 }
