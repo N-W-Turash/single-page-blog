@@ -1,7 +1,7 @@
 import { Container } from "react-bootstrap";
 import withLayout from "../../components/layout/";
 
-function SinglePost() {
+const SinglePost = () => {
   return (
     <Container>
         <h2>SinglePost</h2>

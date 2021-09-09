@@ -10,6 +10,14 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6, .title {
   font-family: "Nunito", sans-serif;
+}
+
+p, article, a, .post-body {
+  font-family: "Open Sans", sans-serif;
+}
+
+.ls-1 {
+  letter-spacing: 0.063rem;
 }
