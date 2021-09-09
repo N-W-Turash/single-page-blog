@@ -31,17 +31,17 @@ const Posts = () => {
 
   return (
     <Container>
-      <h4 className="fw-bold mt-3 mb-4">All Posts</h4>
+      <h4 className="fw-bold mt-3 mb-4 text-primary">All Posts</h4>
+      {
+        loading && <Loader />
+      }
       <Row>
-        {
-          loading && <Loader />
-        }
         {
           posts.length ?
             posts.map((post) => {
               return (
                 <Col xs={12} sm={6} lg={4} xxl={3} key={post.id}>
-                  <Post postId={post.id} title={post.title} body={post.body}/>
+                  <Post postId={post.id} title={post.title} body={post.body} />
                 </Col>
               )
             })

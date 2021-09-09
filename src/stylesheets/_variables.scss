@@ -1,0 +1,19 @@
+/* Color variables */
+
+$theme-colors: (
+    "primary": #003056,
+    "secondary": #288dc1,
+    "light": #f6f9fc,
+);
+
+// Typography
+$font-size-base: 12px; // this changes the font-size throughout bootstrap
+$font-family-sans-serif: "Raleway", sans-serif;
+$font-size-base: 1.167rem;
+$line-height-base: 1.6;
+
+/* Color variables */
+
+/* import bootstrap to set changes */
+@import "~bootstrap/scss/bootstrap";
+

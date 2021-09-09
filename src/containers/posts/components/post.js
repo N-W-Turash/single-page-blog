@@ -7,9 +7,9 @@ const Post = (props) => {
 
     return (
 
-        <Card className="mb-4">
+        <Card className="mb-4 bg-light border-0">
             <Card.Body>
-                <Card.Title className="title fw-bold">{title}</Card.Title>
+                <Card.Title as="h4" className="title fw-bold">{title}</Card.Title>
                 <Card.Text className="post-body">
                     {body}
                 </Card.Text>

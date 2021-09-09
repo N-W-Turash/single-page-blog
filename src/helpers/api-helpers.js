@@ -51,10 +51,7 @@ export const patch = async (url, data, config = {}) => {
 /**
  * DELETE request
  * @param url
- * @param data
  */
-export const delt = async (url, data = {}) => {
-    return await baseInstance.delete(url, { data });
+export const delt = async (url) => {
+    return await baseInstance.delete(url);
 };
-
-
