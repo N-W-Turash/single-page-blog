@@ -7,13 +7,13 @@ function Header() {
     <>
       <Navbar>
         <Container>
-          <Navbar.Brand href="#home">
+          <Navbar.Brand>
             <img
               alt="Blog Logo"
               src={Logo}
               className="d-inline-block brand-logo"
             />
-            <h6 className="d-inline-block fw-bold">BLOG</h6>
+            <h6 className="d-inline-block fw-bold ls-1">BLOG</h6>
           </Navbar.Brand>
         </Container>
       </Navbar>
