@@ -17,7 +17,7 @@ const Comment = (props) => {
 
     const handleDeleteConfirm = () => {
         //setLoading(true);
-        
+
     };
 
     return (
@@ -27,14 +27,16 @@ const Comment = (props) => {
                     <Card.Title as="h6" className="title fw-bold">{name}</Card.Title>
                     <Card.Text className="post-body">
                         <small>
-                            <a className="d-block mb-4 text-decoration-none" href={`mailto:${email}`}>{email}</a>
+                            <a className="d-block mb-4 text-decoration-none text-secondary" href={`mailto:${email}`}>{email}</a>
                             {body}
                         </small>
                     </Card.Text>
                     <Button
                         variant="link"
-                        className="text-error"
+                        className="text-error text-decoration-none ms-n2"
                         onClick={handleShow}
+                        // disable={loading}
+                        size="sm"
                     >
                         <small>Delete This Comment</small>
                     </Button>
