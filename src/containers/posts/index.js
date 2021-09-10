@@ -17,16 +17,16 @@ const Posts = () => {
     getAllPosts()
   }, []);
 
-  const getAllPosts = () => {
+  const getAllPosts = async () => {
 
-    setLoading(true);
-
-    postsApi.getPosts().then(res => {
-      setPosts([...res.data]);
+    try {
+      setLoading(true);
+      const response = await postsApi.getPosts();
+      setPosts([...response.data]);
       setLoading(false);
-    }).catch(err => {
+    } catch (error) {
       setLoading(false);
-    })
+    }
   }
 
   return (
