@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Card } from "react-bootstrap";
+import PropTypes from 'prop-types';
 
 const Post = (props) => {
 
@@ -18,5 +19,11 @@ const Post = (props) => {
         </Card>
     );
 }
+
+Post.propTypes = {
+    postId: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    body: PropTypes.string.isRequired
+};
 
 export default Post;

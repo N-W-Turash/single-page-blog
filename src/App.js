@@ -16,6 +16,9 @@ function App() {
         <Route path="/posts/:id">
           <SinglePostContainer />
         </Route>
+        <Route path="/edit/posts/:id">
+          <SinglePostContainer />
+        </Route>
       </Switch>
     </Router>
   );
