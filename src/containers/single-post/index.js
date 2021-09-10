@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import withLayout from "../../components/layout/";
+import DeleteConfirmationModal from "../../components/modals/delete-confirmation-modal";
 import Loader from "../../components/loader";
 import Comment from "./components/comment";
 import * as postsApi from "../../apis/posts-api";
@@ -13,15 +14,15 @@ const SinglePost = () => {
 
     const [postLoading, setPostLoading] = useState(false);
     const [commentsLoading, setCommentsLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [post, setPost] = useState(null);
     const [comments, setComments] = useState([]);
     const [show, setShow] = useState(false);
-    // const [loading, setLoading] = useState(false);
 
     /**
     * Has effect on init
     */
-     useEffect(() => {
+    useEffect(() => {
         getSinglePost(id);
         getSinglePostComments(id);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -30,28 +31,23 @@ const SinglePost = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const handleDeleteConfirmation = async () => {
 
-    const handleDeleteConfirm = () => {
-        setPostLoading(true);
-        postsApi.deletePost(id).then(
-            (res) => {
-                getSinglePost(id);
-                getSinglePostComments(id);
-                setShow(false);
-                setPostLoading(false);
-                history.push("/");
-            },
-            (err) => {
-                setPostLoading(true);
-                setShow(false);
-            }
-        );
+        try {
+            setLoading(true);
+            await postsApi.deletePost(id);
+            setShow(false);
+            setLoading(false);
+            history.push("/");
+        } catch (error) {
+            setLoading(false);
+            setShow(false);
+        }
     };
 
     const getSinglePost = async (id) => {
-
-        setPostLoading(true);
         try {
+            setPostLoading(true);
             const response = await postsApi.getPost(id);
             setPost({ ...response.data });
             setPostLoading(false);
@@ -108,10 +104,6 @@ const SinglePost = () => {
                                     <Comment
                                         key={comment.id}
                                         comment={comment}
-                                        postId={comment.postId}
-                                        name={comment.name}
-                                        title={comment.title}
-                                        body={comment.body}
                                     />
                                 )
                             })
@@ -119,22 +111,17 @@ const SinglePost = () => {
                     }
                 </Col>
             </Row>
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header>
-                    <Modal.Title>Are you sure to delete this post?</Modal.Title>
-                </Modal.Header>
-                <Modal.Footer>
-                    <Button variant="secondary-outline" size="sm" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="danger" size="sm" onClick={handleDeleteConfirm}>
-                        Yes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <DeleteConfirmationModal
+                show={show}
+                handleClose={handleClose}
+                title="Are you sure want to delete this post?"
+                handleDeleteConfirmation={handleDeleteConfirmation}
+                confirmationText={"Delete"}
+            />
         </Container>
     );
 }
 
 const SinglePostContainer = withLayout(<SinglePost />);
 export default SinglePostContainer;
+
