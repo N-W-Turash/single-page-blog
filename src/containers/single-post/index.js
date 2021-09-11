@@ -9,7 +9,7 @@ import Loader from "../../components/loader";
 import PostContent from "./components/post-content";
 import Comment from "./components/comment";
 import * as postsApi from "../../apis/posts-api";
-import "../../stylesheets/containers/single-post/index.scss";
+import "../../stylesheets/containers/single-post/single-post.scss";
 
 
 const SinglePost = () => {
@@ -24,6 +24,8 @@ const SinglePost = () => {
     const [comments, setComments] = useState([]);
     const [show, setShow] = useState(false);
     const [editing, setEditing] = useState(false);
+    const [showCommentDeleteModal, setShowCommentDeleteModal] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
 
     /**
     * Has effect on init
@@ -37,7 +39,7 @@ const SinglePost = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const handleDeleteConfirmation = async () => {
+    const handlePostDelete = async () => {
 
         try {
             setLoading(true);
@@ -51,6 +53,17 @@ const SinglePost = () => {
         }
     };
 
+    const handleCommentDelete = () => {
+        let commentsList = [...comments];
+        const index = commentsList.findIndex(comment => comment.id === deleteId);
+
+        if (index > -1) {
+            commentsList.splice(index, 1);
+            setComments([...commentsList]);
+            setShowCommentDeleteModal(false);
+        }
+    };
+
     const getSinglePost = async (id) => {
         try {
             setPostLoading(true);
@@ -60,7 +73,7 @@ const SinglePost = () => {
         } catch (error) {
             setPostLoading(false);
         }
-    }
+    };
 
     const getSinglePostComments = async (id) => {
 
@@ -76,12 +89,12 @@ const SinglePost = () => {
 
     const enableEditMode = () => {
         setEditing(true);
-    }
+    };
 
-    const handleSubmit = (values) => {
-        setPost({...values});
+    const handlePostUpdate = (values) => {
+        setPost({ ...values });
         setEditing(false);
-    }
+    };
 
     return (
         <Container>
@@ -124,7 +137,7 @@ const SinglePost = () => {
                                     initialValues={post}
                                     validationSchema={validationSchema}
                                     onSubmit={values => {
-                                        handleSubmit(values);
+                                        handlePostUpdate(values);
                                     }}
                                 >
                                     {() => (
@@ -173,7 +186,7 @@ const SinglePost = () => {
             </Row>
 
             <hr className="mb-4" />
-            
+
             <Row>
                 <Col cs={12}>
                     <h6 className="fw-bold my-4 text-primary">Comments <span>{`(${comments.length.toString()})`}</span></h6>
@@ -184,6 +197,10 @@ const SinglePost = () => {
                                     <Comment
                                         key={comment.id}
                                         comment={comment}
+                                        getSinglePostComments={getSinglePostComments}
+                                        showCommentDeleteModal={showCommentDeleteModal}
+                                        setShowCommentDeleteModal={setShowCommentDeleteModal}
+                                        setDeleteId={setDeleteId}
                                     />
                                 )
                             })
@@ -195,7 +212,14 @@ const SinglePost = () => {
                 show={show}
                 handleClose={handleClose}
                 title="Are you sure want to delete this post?"
-                handleDeleteConfirmation={handleDeleteConfirmation}
+                handleDeleteConfirmation={handlePostDelete}
+                confirmationText={"Delete"}
+            />
+            <DeleteConfirmationModal
+                show={showCommentDeleteModal}
+                handleClose={setShowCommentDeleteModal}
+                title="Are you sure want to delete this Comment?"
+                handleDeleteConfirmation={handleCommentDelete}
                 confirmationText={"Delete"}
             />
         </Container>

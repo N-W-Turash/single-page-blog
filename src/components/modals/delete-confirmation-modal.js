@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { Modal, Button } from "react-bootstrap";
-// import * as postsApi from "../../apis/posts-api";
 
 const DeleteConfirmationModal = (props) => {
 
@@ -34,6 +33,4 @@ DeleteConfirmationModal.propTypes = {
 };
 
 export default DeleteConfirmationModal;
-
-
 

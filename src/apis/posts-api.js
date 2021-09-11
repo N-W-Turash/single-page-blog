@@ -33,5 +33,12 @@ export const deletePost = async (postId) => {
   await delt(`/posts/${postId}`);
 }
 
+/**
+* Delete a specific comment https://jsonplaceholder.typicode.com/posts/1/comments?id=1
+*/
+export const deleteComment = async (postId, commentId) => {
+  await delt(`/posts/${postId}/comments?id=${commentId}`);
+}
+
 
 
